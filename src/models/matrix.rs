@@ -1,5 +1,5 @@
-use std::fmt::Debug;
-use std::ops::{Mul};
+use std::fmt::{Debug, Display};
+use std::ops::{Add, AddAssign, Mul, MulAssign, SubAssign};
 use crate::models::vector::Vector;
 
 
@@ -91,6 +91,38 @@ impl<T: Clone + Debug> Matrix<T> {
     }
 }
 
+impl<T: Clone + Debug> Clone for Matrix<T> {
+    fn clone(&self) -> Self {
+        Matrix {
+            data: self.data.clone(),
+            rows: self.rows,
+            cols: self.cols,
+        }
+    }
+}
+
+impl<T: Clone + Debug> Debug for Matrix<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}", self.data)
+    }
+}
+
+impl<T: Clone + Debug> Display for Matrix<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}", self.data)
+    }
+}
+
+impl<T: Clone + Debug + MulAssign + AddAssign + SubAssign + Copy> Add for Matrix<T> {
+    type Output = Matrix<T>;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        let mut m = self.clone();
+        m.add_matrix(&rhs);
+        m
+    }
+}
+
 impl Mul<f32> for Matrix<f32> {
     type Output = Matrix<f32>;
 
@@ -101,15 +133,10 @@ impl Mul<f32> for Matrix<f32> {
     }
 }
 
-impl<T: Clone + Debug> Clone for Matrix<T> {
-    fn clone(&self) -> Self {
-        Matrix {
-            data: self.data.clone(),
-            rows: self.rows,
-            cols: self.cols,
-        }
+impl<T: PartialEq + Clone + Debug> PartialEq for Matrix<T> {
+    fn eq(&self, other: &Self) -> bool {
+        self.data == other.data
     }
-
 }
 
 // Utils

@@ -4,7 +4,7 @@ use crate::models::matrix::Matrix;
 use crate::models::vector::Vector;
 
 impl<T: Clone + Debug + MulAssign + AddAssign + SubAssign + Copy> Vector<T> {
-    pub fn add(&mut self, v: &Vector<T>) {
+    pub fn add_vector(&mut self, v: &Vector<T>) {
         if self.is_empty() {
             return self.data = v.data.clone();
         }
@@ -16,7 +16,7 @@ impl<T: Clone + Debug + MulAssign + AddAssign + SubAssign + Copy> Vector<T> {
         });
     }
 
-    pub fn sub(&mut self, v: &Vector<T>) {
+    pub fn sub_vector(&mut self, v: &Vector<T>) {
         if v.size() != self.size() {
             panic!("The two vectors need to have the same size");
         }
@@ -34,7 +34,7 @@ impl<T: Clone + Debug + MulAssign + AddAssign + SubAssign + Copy> Vector<T> {
 
 
 impl<T: Clone + Debug + MulAssign + AddAssign + SubAssign + Copy> Matrix<T> {
-    pub fn add(&mut self, v: &Matrix<T>) {
+    pub fn add_matrix(&mut self, v: &Matrix<T>) {
         if v.rows != self.rows || v.cols != self.cols {
             panic!("The two matrices need to have the same size");
         }
@@ -43,7 +43,7 @@ impl<T: Clone + Debug + MulAssign + AddAssign + SubAssign + Copy> Matrix<T> {
         });
     }
 
-    pub fn sub(&mut self, v: &Matrix<T>) {
+    pub fn sub_matrix(&mut self, v: &Matrix<T>) {
         if v.rows != self.rows || v.cols != self.cols {
             panic!("The two matrices need to have the same size");
         }
@@ -67,7 +67,7 @@ mod tests {
     fn test_vector_add() {
         let mut v1 = Vector::new(vec![1, 2, 3]);
         let v2 = Vector::new(vec![4, 5, 6]);
-        v1.add(&v2);
+        v1.add_vector(&v2);
         assert_eq!(v1.data, vec![5, 7, 9]);
     }
 
@@ -75,7 +75,7 @@ mod tests {
     fn test_vector_sub() {
         let mut v1 = Vector::new(vec![1, 2, 3]);
         let v2 = Vector::new(vec![4, 5, 6]);
-        v1.sub(&v2);
+        v1.sub_vector(&v2);
         assert_eq!(v1.data, vec![-3, -3, -3]);
     }
 
@@ -90,7 +90,7 @@ mod tests {
     fn test_matrix_add() {
         let mut m1 = Matrix::new(vec![1, 2, 3, 4, 5, 6], 2, 3);
         let m2 = Matrix::new(vec![7, 8, 9, 10, 11, 12], 2, 3);
-        m1.add(&m2);
+        m1.add_matrix(&m2);
         assert_eq!(m1.data, vec![8, 10, 12, 14, 16, 18]);
     }
 
@@ -98,7 +98,7 @@ mod tests {
     fn test_matrix_sub() {
         let mut m1 = Matrix::new(vec![1, 2, 3, 4, 5, 6], 2, 3);
         let m2 = Matrix::new(vec![7, 8, 9, 10, 11, 12], 2, 3);
-        m1.sub(&m2);
+        m1.sub_matrix(&m2);
         assert_eq!(m1.data, vec![-6, -6, -6, -6, -6, -6]);
     }
 

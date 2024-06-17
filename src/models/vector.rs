@@ -1,5 +1,5 @@
 use std::fmt::{Debug, Display, Formatter};
-use std::ops::{Add, Mul};
+use std::ops::{Add, AddAssign, Mul, MulAssign, Sub, SubAssign};
 use crate::models::matrix::Matrix;
 
 pub struct Vector<T: Clone + Debug> {
@@ -96,6 +96,28 @@ impl Mul<f32> for Vector<f32> {
         v
     }
 }
+
+impl<T: Clone + Debug + MulAssign + AddAssign + SubAssign + Copy> Add for Vector<T> {
+    type Output = Vector<T>;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        let mut v = self.clone();
+        v.add_vector(&rhs);
+        v
+    }
+}
+
+impl<T: Clone + Debug + MulAssign + AddAssign + SubAssign + Copy> Sub for Vector<T> {
+    type Output = Vector<T>;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        let mut v = self.clone();
+        v.sub_vector(&rhs);
+        v
+    }
+}
+
+
 
 #[cfg(test)]
 mod tests {

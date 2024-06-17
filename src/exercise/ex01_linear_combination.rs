@@ -17,7 +17,7 @@ fn linear_combination<T:  Clone + Debug + MulAssign + AddAssign + SubAssign + Co
             v
         })
         .fold(Vector::new(vec![]), |mut acc, v| {
-            acc.add(&v);
+            acc.add_vector(&v);
             acc
         })
 }
