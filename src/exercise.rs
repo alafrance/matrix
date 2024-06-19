@@ -2,3 +2,8 @@ mod ex00_add_substract_scale;
 mod ex09_transpose;
 mod ex01_linear_combination;
 mod ex02_linear_interpolation;
+mod ex04_norm;
+mod ex05_cosine;
+mod ex03_dot;
+mod ex06_cross_product;
+mod ex07_matrix_multiplication_and_linear_map;
