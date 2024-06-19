@@ -1,11 +1,13 @@
 use std::fmt::Debug;
-use std::ops::{Add, Div, Mul};
+use std::iter::Sum;
+use std::ops::{Add, AddAssign, Div, Mul};
 use num_traits::{Float, Pow};
 use crate::models::vector::Vector;
 
 fn angle_cos<T>(u: &Vector::<T>, v: &Vector::<T>) -> f32 where
         for<'a> &'a T: Mul<&'a T, Output = T>,
         f32: Add<T, Output = T>,
+        T: Mul<T, Output = T> + Clone + Debug + AddAssign + Sum,
         T: Clone + Debug + Add<f32> + Pow<T, Output = T> + Div<f32, Output = f32>,
         T: Float + for<'a> Add<<&'a T as Mul<&'a T, >>::Output, Output = T>
 {

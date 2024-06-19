@@ -7,7 +7,7 @@ impl<T: Mul<T, Output = T> + Clone + Debug + AddAssign + Sum> Vector<T>
     where
         for<'a> &'a T: Mul<&'a T, Output = T>
 {
-    fn dot(&self, v: Vector<T>) -> T {
+    pub fn dot(&self, v: Vector<T>) -> T {
         if self.size() != v.size() {
             panic!("The two vectors need to have the same size");
         }

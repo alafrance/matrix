@@ -51,6 +51,13 @@ impl<T: Clone + Debug> Vector<T> {
         self.data[2].clone()
     }
 
+    pub fn get_index(&self, index: usize) -> T {
+        if index >= self.size() {
+            panic!("Index out of bounds");
+        }
+        self.data[index].clone()
+    }
+
     pub fn is_empty(&self) -> bool {
         self.data.is_empty()
     }
@@ -114,6 +121,12 @@ impl<T: Clone + Debug + MulAssign + AddAssign + SubAssign + Copy> Sub for Vector
         let mut v = self.clone();
         v.sub_vector(&rhs);
         v
+    }
+}
+
+impl<T: Clone + Debug + MulAssign + AddAssign + SubAssign + Copy> AddAssign for Vector<T> {
+    fn add_assign(&mut self, rhs: Self) {
+        self.add_vector(&rhs);
     }
 }
 
@@ -196,6 +209,14 @@ mod tests {
     fn test_z_panic() {
         let vector = Vector::from_array(vec![1, 2]);
         vector.z();
+    }
+
+    #[test]
+    fn test_get_index() {
+        let vector = Vector::from_array(vec![1, 2, 3]);
+        assert_eq!(vector.get_index(0), 1);
+        assert_eq!(vector.get_index(1), 2);
+        assert_eq!(vector.get_index(2), 3);
     }
 
 }

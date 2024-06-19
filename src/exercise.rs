@@ -6,4 +6,6 @@ mod ex03_dot;
 mod ex04_norm;
 mod ex05_cosine;
 mod ex06_cross_product;
-mod ex07_matrix_multiplication_and_linear_map;
+mod ex07_linear_map_and_matrix_multiplication;
+mod ex08_trace;
+mod ex10_row_echelon_form;
