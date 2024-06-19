@@ -3,3 +3,7 @@ mod ex09_transpose;
 mod ex01_linear_combination;
 mod ex02_linear_interpolation;
 mod ex03_dot;
+mod ex04_norm;
+mod ex05_cosine;
+mod ex06_cross_product;
+mod ex07_matrix_multiplication_and_linear_map;
