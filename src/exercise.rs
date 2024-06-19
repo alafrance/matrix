@@ -2,3 +2,4 @@ mod ex00_add_substract_scale;
 mod ex09_transpose;
 mod ex01_linear_combination;
 mod ex02_linear_interpolation;
+mod ex03_dot;
