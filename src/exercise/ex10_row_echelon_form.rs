@@ -5,8 +5,12 @@ use crate::models::matrix::Matrix;
 impl<T: Clone + Debug + Default + PartialEq + Add<T, Output= T> + Sub<T, Output = T> + Mul<T, Output = T> + Div<T, Output= T>> Matrix<T> {
     fn row_echelon(&mut self) -> Matrix<T> {
         let mut m = self.clone();
-        let mut index_pivot = 0;
-        m.data.fin
+        let index_pivot = m.data.iter().position(|&x| x != T::default());
+        if index_pivot.is_none() {
+            return m;
+        }
+        let index_pivot = index_pivot.unwrap();
+        if
         todo!()
     }
 
