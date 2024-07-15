@@ -1,5 +1,6 @@
 use std::fmt::{Debug, Display};
-use std::ops::{Add, AddAssign, Mul, MulAssign, SubAssign};
+use std::ops::{Add, AddAssign, Mul, MulAssign, Sub, SubAssign};
+use num_traits::Float;
 use crate::models::vector::Vector;
 
 
@@ -133,14 +134,89 @@ impl<T: Clone + Debug> Matrix<T> {
         }
     }
 
-    pub fn row_addition(&mut self, row1: usize, row2: usize, scalar: T) where T: Mul<T, Output = T> + Add<T, Output= T> {
+    pub fn at(&self, row: usize, col: usize) -> T {
+        if row >= self.rows || col >= self.cols {
+            panic!("Index out of bounds");
+        }
+        let index = row * self.cols + col;
+        self.data[index].clone()
+    }
+
+    pub fn is_null_matrix(&self) -> bool where T: PartialEq + Default {
+        for i in 0..self.rows {
+            for j in 0..self.cols {
+                if self.at(i, j) != T::default() {
+                    return false;
+                }
+            }
+        }
+        true
+    }
+
+    pub fn remove_row(&mut self, row: usize) {
+        if row >= self.rows {
+            panic!("Row index out of bounds");
+        }
+        let start = row * self.cols;
+        self.data.drain(start..start + self.cols);
+        self.rows -= 1;
+    }
+
+    pub fn remove_col(&mut self, col: usize) {
+        if col >= self.cols {
+            panic!("Column index out of bounds");
+        }
+        let mut new_data = Vec::new();
+        for i in 0..self.rows {
+            for j in 0..self.cols {
+                if j != col {
+                    new_data.push(self.at(i, j));
+                }
+            }
+        }
+        self.data = new_data;
+        self.cols -= 1;
+    }
+
+    pub fn is_singular(&self) -> bool where
+        T: Clone + Debug + Default + AddAssign + PartialEq,
+        T: Mul<T, Output = T> + Sub<T, Output = T> + Add<T, Output = T> + From<i32>
+    {
+        if self.is_square() {
+            let mut matrix = self.clone();
+            matrix.determinant() == T::default()
+        } else {
+            false
+        }
+    }
+    pub fn set(&mut self, row: usize, col: usize, value: T) {
+        if row >= self.rows || col >= self.cols {
+            panic!("Index out of bounds");
+        }
+        let index = row * self.cols + col;
+        self.data[index] = value;
+    }
+
+    pub fn minor(&self, row: usize, col: usize) -> Matrix<T> where
+        T: Clone + Debug + Default + AddAssign + PartialEq + MulAssign + SubAssign + Copy + From<i32>,
+        T: Mul<T, Output = T> + Sub<T, Output = T> + Add<T, Output = T>
+    {
+        let mut sub_matrix = self.clone();
+        sub_matrix.remove_row(row);
+        sub_matrix.remove_col(col);
+        sub_matrix
+    }
+
+    pub fn row_addition(&mut self, row1: usize, row2: usize, scalar: T) where
+        T: Mul<T, Output = T> + Add<T, Output = T> + Float
+    {
         if row1 >= self.rows || row2 >= self.rows {
             panic!("Row index out of bounds");
         }
         let start1 = row1 * self.cols;
         let start2 = row2 * self.cols;
         for i in 0..self.cols {
-            self.data[start1 + i] = self.data[start1 + i].clone() + self.data[start2 + i].clone() * scalar.clone();
+            self.data[start1 + i] = (self.data[start1 + i].clone() + self.data[start2 + i].clone() * scalar.clone()).round()
         }
     }
 }
@@ -286,11 +362,11 @@ mod tests {
     #[test]
     fn row_addition() {
         let mut matrix = Matrix::from_arrays(vec![
-            vec![1, 2, 3],
-            vec![4, 5, 6],
+            vec![1., 2., 3.],
+            vec![4., 5., 6.],
         ]);
-        matrix.row_addition(0, 1, 1);
-        assert_eq!(matrix.get_row_vector(0).as_array(), vec![5, 7, 9]);
+        matrix.row_addition(0, 1, 1.);
+        assert_eq!(matrix.get_row_vector(0).as_array(), vec![5., 7., 9.]);
     }
 
     #[test]
@@ -313,5 +389,123 @@ mod tests {
         matrix.row_scaling(0, 2);
         assert_eq!(matrix.get_row_vector(0).as_array(), vec![2, 4, 6]);
         assert_eq!(matrix.get_row_vector(1).as_array(), vec![4, 5, 6]);
+    }
+
+    #[test]
+    fn test_at_position() {
+        let matrix = Matrix::from_arrays(vec![
+            vec![1, 2, 3],
+            vec![4, 5, 6],
+        ]);
+        assert_eq!(matrix.at(0, 0), 1);
+        assert_eq!(matrix.at(0, 1), 2);
+        assert_eq!(matrix.at(0, 2), 3);
+        assert_eq!(matrix.at(1, 0), 4);
+        assert_eq!(matrix.at(1, 1), 5);
+        assert_eq!(matrix.at(1, 2), 6);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_at_position_out_of_bounds() {
+        let matrix = Matrix::from_arrays(vec![
+            vec![1, 2, 3],
+            vec![4, 5, 6],
+        ]);
+        matrix.at(2, 0);
+    }
+
+    #[test]
+    fn test_is_null_matrix() {
+        let matrix = Matrix::from_arrays(vec![
+            vec![0, 0, 0],
+            vec![0, 0, 0],
+        ]);
+        assert_eq!(matrix.is_null_matrix(), true);
+
+        let matrix = Matrix::from_arrays(vec![
+            vec![1, 0, 0],
+            vec![0, 0, 0],
+        ]);
+        assert_eq!(matrix.is_null_matrix(), false);
+    }
+
+    #[test]
+    fn test_remove_row() {
+        let mut matrix = Matrix::from_arrays(vec![
+            vec![1, 2, 3],
+            vec![4, 5, 6],
+            vec![7, 8, 9],
+        ]);
+        matrix.remove_row(1);
+        assert_eq!(matrix.rows(), 2);
+        assert_eq!(matrix.size(), 6);
+        assert_eq!(matrix.at(0, 0), 1);
+        assert_eq!(matrix.at(0, 1), 2);
+        assert_eq!(matrix.at(0, 2), 3);
+        assert_eq!(matrix.at(1, 0), 7);
+        assert_eq!(matrix.at(1, 1), 8);
+        assert_eq!(matrix.at(1, 2), 9);
+    }
+
+    #[test]
+    fn test_remove_col() {
+        let mut matrix = Matrix::from_arrays(vec![
+            vec![1, 2, 3],
+            vec![4, 5, 6],
+            vec![7, 8, 9],
+        ]);
+        matrix.remove_col(1);
+        assert_eq!(matrix.cols(), 2);
+        assert_eq!(matrix.size(), 6);
+        assert_eq!(matrix.at(0, 0), 1);
+        assert_eq!(matrix.at(0, 1), 3);
+        assert_eq!(matrix.at(1, 0), 4);
+        assert_eq!(matrix.at(1, 1), 6);
+        assert_eq!(matrix.at(2, 0), 7);
+        assert_eq!(matrix.at(2, 1), 9);
+    }
+
+    #[test]
+    fn test_is_singular() {
+        let matrix = Matrix::from_arrays(vec![
+            vec![1, 2, 3],
+            vec![4, 5, 6],
+            vec![7, 8, 9],
+        ]);
+        assert_eq!(matrix.is_singular(), true);
+
+        let matrix = Matrix::from_arrays(vec![
+            vec![1, 2, 3],
+            vec![4, 5, 6],
+            vec![7, 8, 10],
+        ]);
+        assert_eq!(matrix.is_singular(), false);
+    }
+    #[test]
+    fn test_set() {
+        let mut matrix = Matrix::from_arrays(vec![
+            vec![1, 2, 3],
+            vec![4, 5, 6],
+        ]);
+        matrix.set(0, 0, 10);
+        assert_eq!(matrix.at(0, 0), 10);
+    }
+
+    #[test]
+    fn test_minor() {
+        let matrix = Matrix::from_arrays(vec![
+            vec![1, 2, 3],
+            vec![4, 5, 6],
+            vec![7, 8, 9],
+        ]);
+        let minor = matrix.minor(1, 1);
+        assert_eq!(minor.rows(), 2);
+        assert_eq!(minor.cols(), 2);
+        minor.print();
+        assert_eq!(minor.at(0, 0), 1);
+        assert_eq!(minor.at(0, 1), 3);
+        assert_eq!(minor.at(1, 0), 7);
+        assert_eq!(minor.at(1, 1), 9);
     }
 }

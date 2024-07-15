@@ -9,3 +9,6 @@ mod ex06_cross_product;
 mod ex07_linear_map_and_matrix_multiplication;
 mod ex08_trace;
 mod ex10_row_echelon_form;
+mod ex11_determinant;
+mod ex12_inverse;
+mod ex13_rank;
