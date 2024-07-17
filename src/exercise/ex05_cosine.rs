@@ -11,10 +11,7 @@ fn angle_cos<T>(u: &Vector::<T>, v: &Vector::<T>) -> f32 where
         T: Clone + Debug + Add<f32> + Pow<T, Output = T> + Div<f32, Output = f32>,
         T: Float + for<'a> Add<<&'a T as Mul<&'a T, >>::Output, Output = T>
 {
-    let dot_product = u.dot(v.clone());
-    let norm_u = u.norm();
-    let norm_v = v.norm();
-    dot_product / (norm_u * norm_v)
+    u.dot(v.clone()) / (u.norm() * v.norm())
 }
 
 #[cfg(test)]

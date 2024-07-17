@@ -28,4 +28,10 @@ mod tests {
         let result = Matrix::<f32>::from_arrays(vec![vec![11., 5.5], vec![16.5, 22.]]);
         assert_eq!(result, lerp(m, m2, 0.5));
     }
+
+    #[test]
+    #[should_panic]
+    fn it_panics() {
+        lerp(1., 2., 1.1);
+    }
 }

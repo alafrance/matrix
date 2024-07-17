@@ -9,6 +9,7 @@ fn linear_combination<T:  Clone + Debug + MulAssign + AddAssign + SubAssign + Co
     if vecs.is_empty() {
         panic!("The vectors array is empty");
     }
+
     vecs.iter()
         .enumerate()
         .map(|(index, vector)| {

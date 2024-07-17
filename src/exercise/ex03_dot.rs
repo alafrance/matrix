@@ -13,7 +13,8 @@ impl<T: Mul<T, Output = T> + Clone + Debug + AddAssign + Sum> Vector<T>
         }
         self.data
             .iter()
-            .zip(v.data.iter()).map(|(a, b)| a * b)
+            .zip(v.data.iter())
+            .map(|(a, b)| a * b)
             .sum()
     }
 }

@@ -72,11 +72,44 @@ mod tests {
     }
 
     #[test]
+    #[should_panic]
+    fn test_vector_add_should_panic() {
+        let mut v1 = Vector::new(vec![1, 2, 3]);
+        let v2 = Vector::new(vec![4, 5]);
+        v1.add_vector(&v2);
+    }
+
+    #[test]
+    fn test_vector_add_empty() {
+        let mut v1 = Vector::new(vec![]);
+        let v2 = Vector::new(vec![4, 5, 6]);
+        v1.add_vector(&v2);
+        assert_eq!(v1.data, vec![4, 5, 6]);
+    }
+
+
+    #[test]
     fn test_vector_sub() {
         let mut v1 = Vector::new(vec![1, 2, 3]);
         let v2 = Vector::new(vec![4, 5, 6]);
         v1.sub_vector(&v2);
         assert_eq!(v1.data, vec![-3, -3, -3]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_vector_sub_should_panic() {
+        let mut v1 = Vector::new(vec![1, 2, 3]);
+        let v2 = Vector::new(vec![4, 5]);
+        v1.sub_vector(&v2);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_vector_sub_empty() {
+        let mut v1 = Vector::new(vec![]);
+        let v2 = Vector::new(vec![4, 5, 6]);
+        v1.sub_vector(&v2);
     }
 
     #[test]
@@ -95,6 +128,22 @@ mod tests {
     }
 
     #[test]
+    #[should_panic]
+    fn test_matrix_add_empty() {
+        let mut m1 = Matrix::new(vec![], 0, 0);
+        let m2 = Matrix::new(vec![7, 8, 9, 10, 11, 12], 2, 3);
+        m1.add_matrix(&m2);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_add_panic() {
+        let mut m1 = Matrix::new(vec![1, 2, 3, 4, 5, 6], 2, 3);
+        let m2 = Matrix::new(vec![7, 8, 9, 10, 11, 12], 2, 2);
+        m1.add_matrix(&m2);
+    }
+
+    #[test]
     fn test_matrix_sub() {
         let mut m1 = Matrix::new(vec![1, 2, 3, 4, 5, 6], 2, 3);
         let m2 = Matrix::new(vec![7, 8, 9, 10, 11, 12], 2, 3);
@@ -103,9 +152,32 @@ mod tests {
     }
 
     #[test]
+    #[should_panic]
+    fn test_matrix_sub_empty() {
+        let mut m1 = Matrix::new(vec![], 0, 0);
+        let m2 = Matrix::new(vec![7, 8, 9, 10, 11, 12], 2, 3);
+        m1.sub_matrix(&m2);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_sub_panic() {
+        let mut m1 = Matrix::new(vec![1, 2, 3, 4, 5, 6], 2, 3);
+        let m2 = Matrix::new(vec![7, 8, 9, 10, 11, 12], 2, 2);
+        m1.sub_matrix(&m2);
+    }
+
+    #[test]
     fn test_matrix_scl() {
         let mut m1 = Matrix::new(vec![1, 2, 3, 4, 5, 6], 2, 3);
         m1.scl(2);
         assert_eq!(m1.data, vec![2, 4, 6, 8, 10, 12]);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_matrix_scl_empty() {
+        let mut m1 = Matrix::new(vec![], 0, 0);
+        m1.scl(2);
     }
 }

@@ -13,7 +13,10 @@ pub struct Matrix<T: Clone + Debug> {
 impl<T: Clone + Debug> Matrix<T> {
     pub fn new(data: Vec<T>, rows: usize, cols: usize) -> Matrix<T> {
         if data.len() % rows != 0 || data.len() % cols != 0 {
-            panic!("Data length must be a multiple of rows");
+            panic!("Data length must be a multiple of rows or cols");
+        }
+        if rows * cols != data.len() {
+            panic!("Data length must be equal to rows * cols");
         }
         Matrix { data, rows, cols }
     }
@@ -219,6 +222,23 @@ impl<T: Clone + Debug> Matrix<T> {
             self.data[start1 + i] = (self.data[start1 + i].clone() + self.data[start2 + i].clone() * scalar.clone()).round()
         }
     }
+
+    pub fn identity(size: usize) -> Matrix<T> where
+        T: Clone + Debug + Default + AddAssign + PartialEq + MulAssign + SubAssign + Copy + From<i32>,
+        T: Mul<T, Output = T> + Sub<T, Output = T> + Add<T, Output = T>
+    {
+        let mut data = Vec::new();
+        for i in 0..size {
+            for j in 0..size {
+                if i == j {
+                    data.push(T::from(1));
+                } else {
+                    data.push(T::default());
+                }
+            }
+        }
+        Matrix::new(data, size, size)
+    }
 }
 
 impl<T: Clone + Debug> Clone for Matrix<T> {
@@ -282,6 +302,18 @@ mod tests {
         assert_eq!(matrix.size(), 6);
         assert_eq!(matrix.shape(), (2, 3));
         assert_eq!(matrix.is_square(), false);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_new_error() {
+        Matrix::new(vec![1, 2, 3, 4, 5, 6], 2, 4);
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_new_empty_error() {
+        Matrix::<i32>::new(vec![], 2, 3);
     }
 
     #[test]
@@ -507,5 +539,22 @@ mod tests {
         assert_eq!(minor.at(0, 1), 3);
         assert_eq!(minor.at(1, 0), 7);
         assert_eq!(minor.at(1, 1), 9);
+    }
+
+    #[test]
+    fn test_identity() {
+        let matrix = Matrix::<i32>::identity(3);
+        assert_eq!(matrix.rows(), 3);
+        assert_eq!(matrix.cols(), 3);
+        assert_eq!(matrix.size(), 9);
+        assert_eq!(matrix.at(0, 0), 1);
+        assert_eq!(matrix.at(0, 1), 0);
+        assert_eq!(matrix.at(0, 2), 0);
+        assert_eq!(matrix.at(1, 0), 0);
+        assert_eq!(matrix.at(1, 1), 1);
+        assert_eq!(matrix.at(1, 2), 0);
+        assert_eq!(matrix.at(2, 0), 0);
+        assert_eq!(matrix.at(2, 1), 0);
+        assert_eq!(matrix.at(2, 2), 1);
     }
 }
