@@ -41,7 +41,7 @@ impl<T> Matrix<T> where
 
 #[cfg(test)]
 mod tests {
-    use crate::exercise::ex07_linear_map_and_matrix_multiplication::Matrix;
+    use super::*;
     use crate::models::vector::Vector;
 
     #[test]

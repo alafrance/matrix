@@ -25,8 +25,7 @@ fn linear_combination<T:  Clone + Debug + MulAssign + AddAssign + SubAssign + Co
 
 #[cfg(test)]
 mod tests {
-    use crate::exercise::ex01_linear_combination::linear_combination;
-    use crate::models::vector::Vector;
+    use super::*;
 
     #[test]
     fn it_works() {

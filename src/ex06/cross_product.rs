@@ -17,7 +17,7 @@ fn cross_product<T: Clone + Debug + Mul<T, Output = T> + Sub<T, Output= T>>(u: &
 
 #[cfg(test)]
 mod tests {
-    use crate::exercise::ex06_cross_product::cross_product;
+    use super::*;
     use crate::models::vector::Vector;
 
     #[test]

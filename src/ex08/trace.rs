@@ -19,7 +19,7 @@ impl<T: Clone + Debug + AddAssign + Default> Matrix<T> {
 
 #[cfg(test)]
 mod tests {
-    use crate::exercise::ex08_trace::Matrix;
+    use super::*;
 
     #[test]
     fn it_works() {

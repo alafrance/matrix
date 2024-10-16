@@ -16,7 +16,7 @@ fn angle_cos<T>(u: &Vector::<T>, v: &Vector::<T>) -> f32 where
 
 #[cfg(test)]
 mod tests {
-    use crate::exercise::ex05_cosine::angle_cos;
+    use super::*;
     use crate::models::vector::Vector;
 
     #[test]

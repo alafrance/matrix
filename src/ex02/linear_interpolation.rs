@@ -10,7 +10,7 @@ fn lerp<V: Mul<f32, Output = V> + Add<Output = V>>(u: V, v: V, t: f32) -> V {
 
 #[cfg(test)]
 mod tests {
-    use crate::exercise::ex02_linear_interpolation::lerp;
+    use super::*;
     use crate::models::matrix::Matrix;
     use crate::models::vector::Vector;
 
