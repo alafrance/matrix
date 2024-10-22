@@ -1,12 +1,11 @@
 use std::fmt::Debug;
 use std::iter::Sum;
 use std::ops::{AddAssign, Mul, MulAssign, SubAssign};
-use crate::models::matrix::Matrix;
-use crate::models::vector::Vector;
+use crate::utils::matrix::matrix::Matrix;
+use crate::utils::vector::vector::Vector;
 
 impl<T> Matrix<T> where
     T: MulAssign + AddAssign + SubAssign + Copy + Clone + Debug + Default + AddAssign + Sum + Mul<T, Output = T>,
-    Vector<T>: AddAssign,
     for<'a> &'a T: Mul<&'a T, Output = T>
 {
 
@@ -42,7 +41,7 @@ impl<T> Matrix<T> where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::models::vector::Vector;
+    use crate::utils::vector::vector::Vector;
 
     #[test]
     fn it_works() {

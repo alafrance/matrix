@@ -2,7 +2,7 @@ use std::fmt::Debug;
 use std::iter::Sum;
 use std::ops::{Add, AddAssign, Div, Mul};
 use num_traits::{Float, Pow};
-use crate::models::vector::Vector;
+use crate::utils::vector::vector::Vector;
 
 fn angle_cos<T>(u: &Vector::<T>, v: &Vector::<T>) -> f32 where
         for<'a> &'a T: Mul<&'a T, Output = T>,
@@ -17,7 +17,7 @@ fn angle_cos<T>(u: &Vector::<T>, v: &Vector::<T>) -> f32 where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::models::vector::Vector;
+    use crate::utils::vector::vector::Vector;
 
     #[test]
     fn it_works() {

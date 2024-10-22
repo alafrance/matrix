@@ -1,7 +1,7 @@
 use std::fmt::Debug;
-use crate::models::matrix::Matrix;
+use crate::utils::matrix::matrix::Matrix;
 
-impl<T: Clone + Debug> Matrix<T> {
+impl<T: Clone + Debug + PartialEq> Matrix<T> {
     pub fn transpose(&self) -> Matrix<T> {
         let mut data = Vec::new();
         for i in 0..self.cols {
@@ -15,7 +15,7 @@ impl<T: Clone + Debug> Matrix<T> {
 
 #[cfg(test)]
 mod tests{
-    use crate::models::matrix::Matrix;
+    use crate::utils::matrix::matrix::Matrix;
 
     #[test]
     fn it_works() {

@@ -1,7 +1,7 @@
 use std::fmt::Debug;
 use std::ops::{Add, AddAssign, Div, Mul, Neg, Sub};
 use num_traits::Float;
-use crate::models::matrix::Matrix;
+use crate::utils::matrix::matrix::Matrix;
 
 impl<T> Matrix<T> where
     T: Clone + Debug + Default + AddAssign + PartialEq + Neg<Output = T> + Float,
@@ -48,7 +48,7 @@ impl<T> Matrix<T> where
 
 #[cfg(test)]
 mod tests {
-    use crate::models::matrix::Matrix;
+    use crate::utils::matrix::matrix::Matrix;
 
     #[test]
     fn it_works() {

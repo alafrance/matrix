@@ -1,6 +1,6 @@
 use std::fmt::Debug;
 use std::ops::{Add, AddAssign, Mul, Sub};
-use crate::models::matrix::Matrix;
+use crate::utils::matrix::matrix::Matrix;
 
 impl<T> Matrix<T> where
 T: Clone + Debug + Default + AddAssign,
@@ -58,7 +58,7 @@ T: Mul<T, Output = T> + Sub<T, Output = T> + Add<T, Output = T> + From<i32>
 
 #[cfg(test)]
 mod tests {
-    use crate::models::matrix::Matrix;
+    use crate::utils::matrix::matrix::Matrix;
 
     #[test]
     fn it_works() {

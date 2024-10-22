@@ -1,6 +1,6 @@
 use std::fmt::Debug;
 use std::ops::{Mul, Sub};
-use crate::models::vector::Vector;
+use crate::utils::vector::vector::Vector;
 
 fn cross_product<T: Clone + Debug + Mul<T, Output = T> + Sub<T, Output= T>>(u: &Vector<T>, v: &Vector<T>) -> Vector<T> {
     if u.size() != 3 || v.size() != 3 {
@@ -18,7 +18,7 @@ fn cross_product<T: Clone + Debug + Mul<T, Output = T> + Sub<T, Output= T>>(u: &
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::models::vector::Vector;
+    use crate::utils::vector::vector::Vector;
 
     #[test]
     fn it_works() {

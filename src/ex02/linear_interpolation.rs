@@ -1,4 +1,26 @@
 use std::ops::{Add, Mul};
+use crate::utils::matrix::matrix::Matrix;
+use crate::utils::vector::vector::Vector;
+
+impl Mul<f32> for Vector<f32> {
+    type Output = Vector<f32>;
+
+    fn mul(self, rhs: f32) -> Self::Output {
+        let mut v = self.clone();
+        v.scl(rhs);
+        v
+    }
+}
+
+impl Mul<f32> for Matrix<f32> {
+    type Output = Matrix<f32>;
+
+    fn mul(self, rhs: f32) -> Self::Output {
+        let mut v = self.clone();
+        v.scl(rhs);
+        v
+    }
+}
 
 fn lerp<V: Mul<f32, Output = V> + Add<Output = V>>(u: V, v: V, t: f32) -> V {
     if t < 0. || t > 1. {
@@ -11,8 +33,8 @@ fn lerp<V: Mul<f32, Output = V> + Add<Output = V>>(u: V, v: V, t: f32) -> V {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::models::matrix::Matrix;
-    use crate::models::vector::Vector;
+    use crate::utils::matrix::matrix::Matrix;
+    use crate::utils::vector::vector::Vector;
 
     #[test]
     fn it_works() {

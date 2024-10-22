@@ -1,8 +1,7 @@
-use std::fmt::Debug;
-use std::ops::{AddAssign, MulAssign, SubAssign};
-use crate::models::vector::Vector;
+use crate::ex00::add_substract_scale_vector::Calculation;
+use crate::utils::vector::vector::Vector;
 
-fn linear_combination<T:  Clone + Debug + MulAssign + AddAssign + SubAssign + Copy>(vecs: &[Vector<T>], coefs: &[T]) -> Vector<T> {
+fn linear_combination<T: Calculation<T>>(vecs: &[Vector<T>], coefs: &[T]) -> Vector<T> {
     if vecs.len() != coefs.len() {
         panic!("The number of vectors and coefficients must be the same");
     }
@@ -18,7 +17,7 @@ fn linear_combination<T:  Clone + Debug + MulAssign + AddAssign + SubAssign + Co
             v
         })
         .fold(Vector::new(vec![]), |mut acc, v| {
-            acc.add_vector(&v);
+            acc += v;
             acc
         })
 }

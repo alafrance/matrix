@@ -1,1 +1,2 @@
-pub mod add_substract_scale;
+pub mod add_substract_scale_vector;
+pub mod add_substract_scale_matrix;

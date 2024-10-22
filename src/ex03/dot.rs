@@ -1,7 +1,7 @@
 use std::fmt::Debug;
 use std::iter::Sum;
 use std::ops::{AddAssign, Mul};
-use crate::models::vector::Vector;
+use crate::utils::vector::vector::Vector;
 
 impl<T: Mul<T, Output = T> + Clone + Debug + AddAssign + Sum> Vector<T>
     where
@@ -21,7 +21,7 @@ impl<T: Mul<T, Output = T> + Clone + Debug + AddAssign + Sum> Vector<T>
 
 #[cfg(test)]
 mod tests {
-    use crate::models::vector::Vector;
+    use crate::utils::vector::vector::Vector;
 
     #[test]
     fn it_works() {

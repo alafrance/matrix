@@ -1,4 +1,3 @@
-mod models;
 pub mod ex00;
 pub mod ex01;
 pub mod ex02;
@@ -13,3 +12,4 @@ pub mod ex10;
 pub mod ex11;
 pub mod ex12;
 pub mod ex13;
+mod utils;

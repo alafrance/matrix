@@ -1,6 +1,6 @@
 use std::fmt::Debug;
 use std::ops::AddAssign;
-use crate::models::matrix::Matrix;
+use crate::utils::matrix::matrix::Matrix;
 
 impl<T: Clone + Debug + AddAssign + Default> Matrix<T> {
     fn trace(&mut self) -> T{

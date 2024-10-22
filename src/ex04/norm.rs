@@ -1,6 +1,6 @@
 use std::fmt::Debug;
 use std::ops::Add;
-use crate::models::vector::Vector;
+use crate::utils::vector::vector::Vector;
 use num_traits::{Float, Pow};
 
 impl<T: Clone + Debug + Float + Pow<T, Output = T> + Add<f32>> Vector::<T> where f32: Add<T, Output = T>{
@@ -26,7 +26,7 @@ impl<T: Clone + Debug + Float + Pow<T, Output = T> + Add<f32>> Vector::<T> where
 
 #[cfg(test)]
 mod tests {
-    use crate::models::vector::Vector;
+    use crate::utils::vector::vector::Vector;
 
     #[test]
     fn it_works() {
