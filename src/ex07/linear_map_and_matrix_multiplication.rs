@@ -43,7 +43,6 @@ impl<T> Matrix<T> where
 impl<T> Matrix<Complex<T>> where
     T: Clone + Float + Debug + Default
 {
-    // Multiplication Matrice x Vecteur
     pub fn mul_vec_complex(&mut self, vec: Vector<Complex<T>>) -> Vector<Complex<T>> {
         if self.cols != vec.size() {
             panic!("The number of columns in the matrix must be the same as the size of the vector");
@@ -56,7 +55,6 @@ impl<T> Matrix<Complex<T>> where
         sum
     }
 
-    // Multiplication Matrice x Matrice
     pub fn mul_mat_complex(&mut self, mat: Matrix<Complex<T>>) -> Matrix<Complex<T>> {
         if self.cols != mat.rows {
             panic!("The number of columns in the first matrix must be the same as the number of rows in the second matrix");
