@@ -24,6 +24,7 @@ fn linear_combination<T: Calculation<T>>(vecs: &[Vector<T>], coefs: &[T]) -> Vec
 
 #[cfg(test)]
 mod tests {
+    use num_complex::Complex;
     use super::*;
 
     #[test]
@@ -36,5 +37,17 @@ mod tests {
 
         assert_eq!(Vector::<f64>::from_array(vec![10., -2., 0.5]), linear_combination::<f64>(&[e1, e2, e3], &[10., -2., 0.5]));
         assert_eq!(Vector::<f64>::from_array(vec![10., 0., 230.]), linear_combination::<f64>(&[v1, v2], &[10., -2.]));
+    }
+
+    #[test]
+    fn test_complex_numbers() {
+        let e1 = Vector::<Complex<f64>>::from_array(vec![Complex::new(1., 0.), Complex::new(0., 0.), Complex::new(0., 0.)]);
+        let e2 = Vector::<Complex<f64>>::from_array(vec![Complex::new(0., 0.), Complex::new(1., 0.), Complex::new(0., 0.)]);
+        let e3 = Vector::<Complex<f64>>::from_array(vec![Complex::new(0., 0.), Complex::new(0., 0.), Complex::new(1., 0.)]);
+        let v1 = Vector::<Complex<f64>>::from_array(vec![Complex::new(1., 0.), Complex::new(2., 0.), Complex::new(3., 0.)]);
+        let v2 = Vector::<Complex<f64>>::from_array(vec![Complex::new(0., 0.), Complex::new(10., 0.), Complex::new(-100., 0.)]);
+
+        assert_eq!(Vector::<Complex<f64>>::from_array(vec![Complex::new(10., 0.), Complex::new(-2., 0.), Complex::new(0.5, 0.)]), linear_combination::<Complex<f64>>(&[e1, e2, e3], &[Complex::new(10., 0.), Complex::new(-2., 0.), Complex::new(0.5, 0.)]));
+        assert_eq!(Vector::<Complex<f64>>::from_array(vec![Complex::new(10., 0.), Complex::new(0., 0.), Complex::new(230., 0.)]), linear_combination::<Complex<f64>>(&[v1, v2], &[Complex::new(10., 0.), Complex::new(-2., 0.)]));
     }
 }

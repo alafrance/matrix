@@ -159,4 +159,48 @@ mod tests {
         v1.scl(2);
         assert_eq!(v1.data, vec![2, 4, 6]);
     }
+
+    #[test]
+    fn test_add_complex_numbers() {
+        use num_complex::Complex;
+        let c1 = Complex::new(1.0, 2.0);
+        let c2 = Complex::new(3.0, 4.0);
+        let v1 = Vector::new(vec![c1]);
+        let v2 = Vector::new(vec![c2]);
+
+        let v3 = v1 + v2;
+        assert_eq!(v3.data, vec![Complex::new(4.0, 6.0)]);
+
+        let mut v1 = Vector::new(vec![c1]);
+        let v2 = Vector::new(vec![c2]);
+        v1 += v2;
+        assert_eq!(v1.data, vec![Complex::new(4.0, 6.0)]);
+    }
+
+    #[test]
+    fn test_complex_numbers_sub() {
+        use num_complex::Complex;
+        let c1 = Complex::new(1.0, 2.0);
+        let c2 = Complex::new(3.0, 4.0);
+        let v1 = Vector::new(vec![c1]);
+        let v2 = Vector::new(vec![c2]);
+
+        let v3 = v1 - v2;
+        assert_eq!(v3.data, vec![Complex::new(-2.0, -2.0)]);
+
+        let mut v1 = Vector::new(vec![c1]);
+        let v2 = Vector::new(vec![c2]);
+        v1 -= v2;
+        assert_eq!(v1.data, vec![Complex::new(-2.0, -2.0)]);
+    }
+
+    #[test]
+    fn test_complex_numbers_scl() {
+        use num_complex::Complex;
+        let c1 = Complex::new(1.0, 2.0);
+        let mut v1 = Vector::new(vec![c1]);
+
+        v1.scl(Complex::new(2.0, 0.0));
+        assert_eq!(v1.data, vec![Complex::new(2.0, 4.0)]);
+    }
 }

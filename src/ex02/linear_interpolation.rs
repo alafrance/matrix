@@ -22,7 +22,9 @@ impl Mul<f32> for Matrix<f32> {
     }
 }
 
-fn lerp<V: Mul<f32, Output = V> + Add<Output = V>>(u: V, v: V, t: f32) -> V {
+fn lerp<V: Mul<f32, Output = V> + Add<Output = V>>(u: V, v: V, t: f32) -> V where
+    V: Mul<f32, Output = V> + Add<Output = V>
+{
     if t < 0. || t > 1. {
         panic!("The interpolation factor must be between 0 and 1");
     }
@@ -32,6 +34,7 @@ fn lerp<V: Mul<f32, Output = V> + Add<Output = V>>(u: V, v: V, t: f32) -> V {
 
 #[cfg(test)]
 mod tests {
+    use num_complex::Complex;
     use super::*;
     use crate::utils::matrix::matrix::Matrix;
     use crate::utils::vector::vector::Vector;
@@ -55,5 +58,16 @@ mod tests {
     #[should_panic]
     fn it_panics() {
         lerp(1., 2., 1.1);
+    }
+
+    #[test]
+
+    fn test_complex_numbers() {
+        let u = Complex::new(1.0, 2.0);
+        let v = Complex::new(3.0, 4.0);
+        let t = 0.5;
+
+        let result = lerp(u, v, t);
+        assert_eq!(Complex::new(2.0, 3.0), result);
     }
 }

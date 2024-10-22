@@ -59,14 +59,14 @@ impl<T: Clone + Debug> Matrix<T> {
     }
 
     pub fn identity(size: usize) -> Matrix<T> where
-        T: Clone + Debug + Default + AddAssign + PartialEq + MulAssign + SubAssign + Copy + From<i32>,
+        T: Clone + Debug + Default + AddAssign + PartialEq + MulAssign + SubAssign + Copy + From<f64>,
         T: Mul<T, Output=T> + Sub<T, Output=T> + Add<T, Output=T>
     {
         let mut data = Vec::new();
         for i in 0..size {
             for j in 0..size {
                 if i == j {
-                    data.push(T::from(1));
+                    data.push(T::from(1.));
                 } else {
                     data.push(T::default());
                 }
@@ -147,18 +147,18 @@ mod tests {
 
     #[test]
     fn test_identity() {
-        let matrix = Matrix::<i32>::identity(3);
+        let matrix = Matrix::<f64>::identity(3);
         assert_eq!(matrix.rows(), 3);
         assert_eq!(matrix.cols(), 3);
         assert_eq!(matrix.size(), 9);
-        assert_eq!(matrix.at(0, 0), 1);
-        assert_eq!(matrix.at(0, 1), 0);
-        assert_eq!(matrix.at(0, 2), 0);
-        assert_eq!(matrix.at(1, 0), 0);
-        assert_eq!(matrix.at(1, 1), 1);
-        assert_eq!(matrix.at(1, 2), 0);
-        assert_eq!(matrix.at(2, 0), 0);
-        assert_eq!(matrix.at(2, 1), 0);
-        assert_eq!(matrix.at(2, 2), 1);
+        assert_eq!(matrix.at(0, 0), 1.);
+        assert_eq!(matrix.at(0, 1), 0.);
+        assert_eq!(matrix.at(0, 2), 0.);
+        assert_eq!(matrix.at(1, 0), 0.);
+        assert_eq!(matrix.at(1, 1), 1.);
+        assert_eq!(matrix.at(1, 2), 0.);
+        assert_eq!(matrix.at(2, 0), 0.);
+        assert_eq!(matrix.at(2, 1), 0.);
+        assert_eq!(matrix.at(2, 2), 1.);
     }
 }

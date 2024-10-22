@@ -17,6 +17,7 @@ fn cross_product<T: Clone + Debug + Mul<T, Output = T> + Sub<T, Output= T>>(u: &
 
 #[cfg(test)]
 mod tests {
+    use num_complex::Complex;
     use super::*;
     use crate::utils::vector::vector::Vector;
 
@@ -39,4 +40,10 @@ mod tests {
         assert_eq!(Vector::<f32>::new(vec![0., 0., 0.]), cross_product(&v, &v2));
     }
 
+    #[test]
+    fn test_with_complex_number() {
+        let v = Vector::<Complex<f64>>::new(vec![Complex::new(0., 0.), Complex::new(0., 0.), Complex::new(1., 0.)]);
+        let v2 = Vector::<Complex<f64>>::new(vec![Complex::new(1., 0.), Complex::new(0., 0.), Complex::new(0., 0.)]);
+        assert_eq!(Vector::<Complex<f64>>::new(vec![Complex::new(0., 0.), Complex::new(1., 0.), Complex::new(0., 0.)]), cross_product(&v, &v2));
+    }
 }

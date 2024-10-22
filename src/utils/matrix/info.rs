@@ -36,11 +36,11 @@ impl<T: Clone + Debug> Matrix<T> {
 
     pub fn is_singular(&self) -> bool where
         T: Clone + Debug + Default + AddAssign + PartialEq,
-        T: Mul<T, Output = T> + Sub<T, Output = T> + Add<T, Output = T> + From<i32>
+        T: Mul<T, Output = T> + Sub<T, Output = T> + Add<T, Output = T> + From<f64>
     {
         if self.is_square() {
             let mut matrix = self.clone();
-            matrix.determinant() == T::default()
+            matrix.determinant()  == T::default()
         } else {
             false
         }
@@ -79,16 +79,16 @@ mod tests {
     #[test]
     fn test_is_singular() {
         let matrix = Matrix::from_arrays(vec![
-            vec![1, 2, 3],
-            vec![4, 5, 6],
-            vec![7, 8, 9],
+            vec![1., 2., 3.],
+            vec![4., 5., 6.],
+            vec![7., 8., 9.],
         ]);
         assert_eq!(matrix.is_singular(), true);
 
         let matrix = Matrix::from_arrays(vec![
-            vec![1, 2, 3],
-            vec![4, 5, 6],
-            vec![7, 8, 10],
+            vec![1., 2., 3.],
+            vec![4., 5., 6.],
+            vec![7., 8., 10.],
         ]);
         assert_eq!(matrix.is_singular(), false);
     }

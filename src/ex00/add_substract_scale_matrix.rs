@@ -57,7 +57,7 @@ impl<T: Calculation<T>> SubAssign for Matrix<T> {
 impl<T: Calculation<T>> Matrix<T> {
     pub fn scl(&mut self, a: T) {
         self.data.iter_mut().for_each(|element| {
-            *element *= a
+            *element *= a;
         });
     }
 }
@@ -144,5 +144,49 @@ mod tests {
     fn test_matrix_scl_empty() {
         let mut m1 = Matrix::new(vec![], 0, 0);
         m1.scl(2);
+    }
+
+    #[test]
+    fn test_add_complex_numbers() {
+        use num_complex::Complex;
+        let c1 = Complex::new(1.0, 2.0);
+        let c2 = Complex::new(3.0, 4.0);
+        let v1 = Matrix::new(vec![c1], 1, 1);
+        let v2 = Matrix::new(vec![c2], 1, 1);
+
+        let v3 = v1 + v2;
+        assert_eq!(v3.data, vec![Complex::new(4.0, 6.0)]);
+
+        let mut v1 = Matrix::new(vec![c1], 1, 1);
+        let v2 = Matrix::new(vec![c2], 1, 1);
+        v1 += v2;
+        assert_eq!(v1.data, vec![Complex::new(4.0, 6.0)]);
+    }
+
+    #[test]
+    fn test_complex_numbers_sub() {
+        use num_complex::Complex;
+        let c1 = Complex::new(1.0, 2.0);
+        let c2 = Complex::new(3.0, 4.0);
+        let v1 = Matrix::new(vec![c1], 1, 1);
+        let v2 = Matrix::new(vec![c2], 1, 1);
+
+        let v3 = v1 - v2;
+        assert_eq!(v3.data, vec![Complex::new(-2.0, -2.0)]);
+
+        let mut v1 = Matrix::new(vec![c1], 1, 1);
+        let v2 = Matrix::new(vec![c2], 1, 1);
+        v1 -= v2;
+        assert_eq!(v1.data, vec![Complex::new(-2.0, -2.0)]);
+    }
+
+    #[test]
+    fn test_complex_numbers_scl() {
+        use num_complex::Complex;
+        let c1 = Complex::new(1.0, 2.0);
+        let mut v1 = Matrix::new(vec![c1], 1, 1);
+
+        v1.scl(Complex::new(2.0, 0.0));
+        assert_eq!(v1.data, vec![Complex::new(2.0, 4.0)]);
     }
 }

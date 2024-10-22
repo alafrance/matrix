@@ -1,11 +1,10 @@
 use std::fmt::Debug;
 use std::ops::{Add, AddAssign, Div, Mul, Neg, Sub};
-use num_traits::Float;
 use crate::utils::matrix::matrix::Matrix;
 
 impl<T> Matrix<T> where
-    T: Clone + Debug + Default + AddAssign + PartialEq + Neg<Output = T> + Float,
-    T: Mul<T, Output = T> + Sub<T, Output = T> + Add<T, Output = T> + From<i32> + Div<T, Output = T>
+    T: Clone + Debug + Default + AddAssign + PartialEq + Neg<Output = T>,
+    T: Mul<T, Output = T> + Sub<T, Output = T> + Add<T, Output = T> + From<f64> + Div<T, Output = T>
 {
     fn rank(&mut self) -> usize {
         let echelon = self.row_echelon();
@@ -30,6 +29,7 @@ impl<T> Matrix<T> where
 
 #[cfg(test)]
 mod tests {
+    use num_complex::Complex;
     use crate::utils::matrix::matrix::Matrix;
 
     #[test]
@@ -74,7 +74,15 @@ mod tests {
             vec![21., 18., 7.],
         ]);
         assert_eq!(matrix.rank(), 3);
+    }
 
-
+    #[test]
+    fn test_complex_numbers() {
+        let mut matrix = Matrix::from_arrays(vec![
+            vec![Complex::new(1., 0.), Complex::new(2., 0.), Complex::new(3., 0.)],
+            vec![Complex::new(0., 1.), Complex::new(-1., 1.), Complex::new(1., 1.)],
+            vec![Complex::new(1., 0.), Complex::new(2., 2.), Complex::new(3., 3.)]
+        ]);
+        assert_eq!(matrix.rank(), 3);
     }
 }

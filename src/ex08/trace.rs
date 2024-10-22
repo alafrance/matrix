@@ -19,6 +19,7 @@ impl<T: Clone + Debug + AddAssign + Default> Matrix<T> {
 
 #[cfg(test)]
 mod tests {
+    use num_complex::Complex;
     use super::*;
 
     #[test]
@@ -45,5 +46,11 @@ mod tests {
     fn it_panics_too() {
         let mut m1 = Matrix::new(vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 2, 5);
         m1.trace();
+    }
+
+    #[test]
+    fn test_with_complex_numbers() {
+        let mut m1 = Matrix::new(vec![Complex::new(1, 0), Complex::new(2, 0), Complex::new(3, 0), Complex::new(4, 0)], 2, 2);
+        assert_eq!(Complex::new(5, 0), m1.trace());
     }
 }

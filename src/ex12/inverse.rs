@@ -3,7 +3,7 @@ use std::ops::{Add, AddAssign, Div, Mul, MulAssign, Sub, SubAssign};
 use crate::utils::matrix::matrix::Matrix;
 
 impl<T> Matrix<T> where
-T: Clone + Debug + Default + AddAssign + PartialEq + MulAssign + SubAssign + Copy + From<i32>,
+T: Clone + Debug + Default + AddAssign + PartialEq + MulAssign + SubAssign + Copy + From<f64>,
 T: Mul<T, Output = T> + Sub<T, Output = T> + Add<T, Output = T> + Div<T, Output = T>
 {
     pub fn inverse(&mut self) -> Matrix<T> {
@@ -47,7 +47,7 @@ T: Mul<T, Output = T> + Sub<T, Output = T> + Add<T, Output = T> + Div<T, Output 
         let mut l = Matrix::new(vec![T::default();self.rows*self.cols], self.rows, self.cols);
         let mut u = self.clone();
         for row in 0..self.rows {
-            l.set(row, row, T::from(1));
+            l.set(row, row, T::from(1.));
             for row_below in row+1..self.rows {
                 let scalar = u.at(row_below, row) / u.at(row, row);
                 l.set(row_below, row, scalar);
@@ -89,6 +89,7 @@ T: Mul<T, Output = T> + Sub<T, Output = T> + Add<T, Output = T> + Div<T, Output 
 
 #[cfg(test)]
 mod tests {
+    use num_complex::Complex;
     use crate::utils::matrix::matrix::Matrix;
 
     #[test]
@@ -132,5 +133,16 @@ mod tests {
             vec![7., 8., 9.],
         ]);
         matrix.inverse();
+    }
+
+    #[test]
+    fn test_with_complex_numbers() {
+        // Création d'une matrice complexe 3x3
+        let mut matrix = Matrix::from_arrays(vec![
+            vec![Complex::new(1.0, 2.0), Complex::new(2.0, -1.0), Complex::new(3.0, 0.0)],
+            vec![Complex::new(0.0, 1.0), Complex::new(-1.0, 1.0), Complex::new(1.0, 1.0)],
+            vec![Complex::new(1.0, 0.0), Complex::new(2.0, 2.0), Complex::new(3.0, 3.0)]
+        ]);
+        matrix.inverse().print();
     }
 }

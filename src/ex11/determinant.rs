@@ -4,7 +4,7 @@ use crate::utils::matrix::matrix::Matrix;
 
 impl<T> Matrix<T> where
 T: Clone + Debug + Default + AddAssign,
-T: Mul<T, Output = T> + Sub<T, Output = T> + Add<T, Output = T> + From<i32>
+T: Mul<T, Output = T> + Sub<T, Output = T> + Add<T, Output = T> + From<f64>
 {
     pub fn determinant(&mut self) -> T {
         if !self.is_square() {
@@ -48,16 +48,16 @@ T: Mul<T, Output = T> + Sub<T, Output = T> + Add<T, Output = T> + From<i32>
             sub_matrix.remove_row(row);
             sub_matrix.remove_col(0);
             let sub_det = sub_matrix.determinant();
-            let sign = T::from(if row % 2 == 0 { 1 } else { -1 });
+            let sign = if row % 2 == 0 { T::from(1.0) } else { T::from(-1.0) };
             det += self.at(row, 0) * sub_det * sign;
         }
         det
     }
-
 }
 
 #[cfg(test)]
 mod tests {
+    use num_complex::Complex;
     use crate::utils::matrix::matrix::Matrix;
 
     #[test]
@@ -88,5 +88,11 @@ mod tests {
             vec![28., -4., 17., 1.],
         ]);
         assert_eq!(u.determinant(), 1032.);
+    }
+
+    #[test]
+    fn test_with_complex_numbers() {
+        let mut u = Matrix::<Complex<f64>>::new(vec![Complex::new(1., 0.), Complex::new(2., 0.), Complex::new(3., 0.), Complex::new(4., 0.)], 2, 2);
+        assert_eq!(u.determinant(), Complex::new(-2., 0.));
     }
 }

@@ -1,5 +1,4 @@
 use std::ops::{Add, Mul};
-use num_traits::Float;
 use crate::utils::matrix::matrix::Matrix;
 pub trait Setter<T>: Mul<T, Output=T> + Clone {}
 impl<T: Mul<T, Output=T> + Clone> Setter<T> for T {}
@@ -28,7 +27,7 @@ impl<T: Setter<T>> Matrix<T> {
     }
 
     pub fn row_addition(&mut self, row1: usize, row2: usize, scalar: T) where
-        T: Mul<T, Output = T> + Add<T, Output = T> + Float
+        T: Mul<T, Output = T> + Add<T, Output = T>
     {
         if row1 >= self.rows || row2 >= self.rows {
             panic!("Row index out of bounds");
@@ -36,7 +35,7 @@ impl<T: Setter<T>> Matrix<T> {
         let start1 = row1 * self.cols;
         let start2 = row2 * self.cols;
         for i in 0..self.cols {
-            self.data[start1 + i] = (self.data[start1 + i].clone() + self.data[start2 + i].clone() * scalar.clone()).round()
+            self.data[start1 + i] = self.data[start1 + i].clone() + self.data[start2 + i].clone() * scalar.clone();
         }
     }
 

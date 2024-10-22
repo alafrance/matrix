@@ -1,11 +1,10 @@
 use std::fmt::Debug;
 use std::ops::{Add, AddAssign, Div, Mul, Neg, Sub};
-use num_traits::Float;
 use crate::utils::matrix::matrix::Matrix;
 
 impl<T> Matrix<T> where
-    T: Clone + Debug + Default + AddAssign + PartialEq + Neg<Output = T> + Float,
-    T: Mul<T, Output = T> + Sub<T, Output = T> + Add<T, Output = T> + From<i32> + Div<T, Output = T>
+    T: Clone + Debug + Default + AddAssign + PartialEq + Neg<Output = T>,
+    T: Mul<T, Output = T> + Sub<T, Output = T> + Add<T, Output = T> + Div<T, Output = T>
 {
     pub fn row_echelon(&mut self) -> Matrix<T> {
         for row in 0..self.rows {
@@ -48,6 +47,7 @@ impl<T> Matrix<T> where
 
 #[cfg(test)]
 mod tests {
+    use num_complex::Complex;
     use crate::utils::matrix::matrix::Matrix;
 
     #[test]
@@ -57,29 +57,45 @@ mod tests {
             vec![4., 5., 6.],
             vec![1., 1., 0.],
         ]);
-        matrix.row_echelon().print();
-        println!();
+        assert_eq!(matrix.row_echelon(), Matrix::from_arrays(vec![
+            vec![1., 2., 3.],
+            vec![0., -3., -6.],
+            vec![0., 0., -1.],
+        ]));
 
         let mut matrix = Matrix::from_arrays(vec![
             vec![1., 2.],
             vec![2., 4.],
         ]);
-        matrix.row_echelon().print();
-        println!();
+        assert_eq!(matrix.row_echelon(), Matrix::from_arrays(vec![
+            vec![1., 2.],
+            vec![0., 0.],
+        ]));
 
         let mut matrix = Matrix::from_arrays(vec![
             vec![1., 2.],
             vec![3., 4.],
         ]);
-        matrix.row_echelon().print();
-        println!();
+        assert_eq!(matrix.row_echelon(), Matrix::from_arrays(vec![
+            vec![1., 2.],
+            vec![0., -2.],
+        ]));
 
         let mut matrix = Matrix::from_arrays(vec![
             vec![8., 5., -2., 4., 28.],
             vec![4., 2.5, 20., 4., -4.],
             vec![8., 5., 1., 4., 17.],
         ]);
-        matrix.row_echelon().print();
-        println!();
+        assert_eq!(matrix.row_echelon(), Matrix::from_arrays(vec![
+            vec![8., 5., -2., 4., 28.],
+            vec![0., 0.0, 21., 2.0, -18.],
+            vec![0., 0., 0., -0., -8.],
+        ]));
+    }
+
+    #[test]
+    fn test_with_complex_numbers() {
+        let mut m1 = Matrix::<Complex<f64>>::new(vec![Complex::new(1., 0.), Complex::new(2., 0.), Complex::new(3., 0.), Complex::new(4., 0.)], 2, 2);
+        assert_eq!(m1.row_echelon(), Matrix::new(vec![Complex::new(1., 0.), Complex::new(2., 0.), Complex::new(0., 0.), Complex::new(-2., 0.)], 2, 2));
     }
 }
