@@ -1,4 +1,6 @@
 use crate::utils::matrix::matrix::Matrix;
+use nalgebra::Matrix4;
+use nalgebra::Perspective3;
 
 fn projection(fov: f32, ratio: f32, near: f32, far: f32) -> Matrix::<f32> {
     let fov_radians = fov.to_radians();
@@ -19,16 +21,27 @@ fn projection(fov: f32, ratio: f32, near: f32, far: f32) -> Matrix::<f32> {
 
 #[cfg(test)]
 mod tests {
-    use num_complex::Complex;
-
     #[test]
     fn test_projection() {
-        Complex::new(1.0, 2.0);
-        let fov = 90.0;
-        let ratio = 16.0 / 9.0;
+        let fov = 45.0;
+        let ratio = 1.;
         let near = 0.1;
-        let far = 100.0;
+        let far = 10000.0;
         let m = super::projection(fov, ratio, near, far);
+        let perspective = Perspective3::new(ratio, fov, near, far);
+        let expected_matrix: Matrix4<f32> = perspective.into_inner();
+
         println!("{:?}", m);
+        // Compare les matrices avec tolérance
+        let tolerance = 1e-6;
+        for i in 0..4 {
+            for j in 0..4 {
+                assert!(
+                    (m.at(i,j) - expected_matrix[(i, j)]).abs() < tolerance,
+                    "Mismatch at ({}, {}): expected {}, got {}",
+                    i, j, expected_matrix[(i, j)], m.at(i, j)
+                );
+            }
+        }
     }
 }
