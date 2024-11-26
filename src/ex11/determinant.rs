@@ -26,6 +26,8 @@ T: Mul<T, Output = T> + Sub<T, Output = T> + Add<T, Output = T> + From<f64>
             - self.at(0, 1) * self.at(1, 0)
     }
 
+    // det(M)=a⋅det(eh​fi​)−b⋅det(dg​fi​)+c⋅det(dg​eh​)
+
     fn determinant_3_3(&self) -> T {
         self.at(0,0) * Matrix::from_arrays(vec![
             vec![self.at(1, 1), self.at(1, 2)],
@@ -40,7 +42,8 @@ T: Mul<T, Output = T> + Sub<T, Output = T> + Add<T, Output = T> + From<f64>
             vec![self.at(2, 0), self.at(2, 1)],
         ]).determinant_2_2()
     }
-
+    
+    // det(A)=i=0∑3​(−1)i⋅Ai,0​⋅det(Mi,0​)
     fn determinant_4_4(&self) -> T {
         let mut det: T = T::default();
         for row in 0..self.rows {
