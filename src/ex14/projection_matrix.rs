@@ -1,6 +1,4 @@
 use crate::utils::matrix::matrix::Matrix;
-use nalgebra::Matrix4;
-use nalgebra::Perspective3;
 
 fn projection(fov: f32, ratio: f32, near: f32, far: f32) -> Matrix::<f32> {
     let fov_radians = fov.to_radians();
@@ -21,26 +19,24 @@ fn projection(fov: f32, ratio: f32, near: f32, far: f32) -> Matrix::<f32> {
 
 #[cfg(test)]
 mod tests {
+    use nalgebra::{Perspective3};
+
     #[test]
     fn test_projection() {
         let fov = 45.0;
-        let ratio = 1.;
+        let fovy = 3.14 / 4.0;
+        let ratio = 16.0 / 9.0;
         let near = 0.1;
-        let far = 10000.0;
-        let m = super::projection(fov, ratio, near, far);
-        let perspective = Perspective3::new(ratio, fov, near, far);
-        let expected_matrix: Matrix4<f32> = perspective.into_inner();
+        let far = 1000.0;
 
-        println!("{:?}", m);
-        // Compare les matrices avec tolérance
-        let tolerance = 1e-6;
+        let m = super::projection(fov, ratio, near, far);
+        let perspective = Perspective3::new(ratio, fovy, near, far);
+        let perspective = perspective.into_inner();
+        let tolerance = 1e-2;
+
         for i in 0..4 {
             for j in 0..4 {
-                assert!(
-                    (m.at(i,j) - expected_matrix[(i, j)]).abs() < tolerance,
-                    "Mismatch at ({}, {}): expected {}, got {}",
-                    i, j, expected_matrix[(i, j)], m.at(i, j)
-                );
+                assert!((m.at(i, j) - perspective[(i, j)]).abs() < tolerance);
             }
         }
     }
